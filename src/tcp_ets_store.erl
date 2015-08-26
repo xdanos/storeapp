@@ -35,7 +35,7 @@ handle_accept(_Socket, Name) ->
 
 %% @private
 handle_tcp(_Socket, IoData, State = #state{count = Count, buffer = Buffer}) when Count rem 1000 == 0 ->
-	ok = store_ets:store('node@kefalos@fi.muni.cz', Count, lists:reverse([IoData | Buffer])),
+	ok = store_ets:store('node@kefalos.fi.muni.cz', Count, lists:reverse([IoData | Buffer])),
 	{ok, State#state{count = Count + 1, buffer = []}};
 handle_tcp(_Socket, IoData, State = #state{count = Count, buffer = Buffer}) ->
 	{ok, State#state{count = Count + 1, buffer = [IoData | Buffer]}}.
