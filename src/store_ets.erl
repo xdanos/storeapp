@@ -12,7 +12,7 @@
 -behaviour(gen_server).
 
 %% API
--export([start_link/0, store/1]).
+-export([start_link/0, store/3]).
 
 %% gen_server callbacks
 -export([init/1,
@@ -31,8 +31,8 @@
 start_link() ->
 	gen_server:start_link({local, ?MODULE}, ?MODULE, [], []).
 
-store(IOData) ->
-	gen_server:call(?MODULE, {store, IOData}).
+store(Node, Id, IOData) ->
+	gen_server:call({?MODULE, Node}, {store, {Id, IOData}}).
 
 %%%===================================================================
 %%% callbacks
@@ -42,7 +42,8 @@ init([]) ->
 	ets:new(mytable, [set]),
 	{ok, #state{}}.
 
-handle_call(_Request, _From, State) ->
+handle_call({store, {Id, IOData}}, _From, State) ->
+	true = ets:insert(mytable, {Id, IOData}),
 	{reply, ok, State}.
 
 handle_cast(_Request, State) ->
