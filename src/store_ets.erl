@@ -39,7 +39,7 @@ store(Node, Id, IOData) ->
 %%%===================================================================
 
 init([]) ->
-	ets:new(mytable, [set]),
+	ets:new(mytable, [set, named_table]),
 	{ok, #state{}}.
 
 handle_call({store, {Id, IOData}}, _From, State) ->
